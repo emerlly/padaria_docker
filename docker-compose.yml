@@ -1,0 +1,41 @@
+
+services:
+  # Serviço para o banco de dados MySQL
+  db:
+    image: mysql:8.0
+    container_name: Padaria
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: padaria_db
+      MYSQL_USER: padaria
+      MYSQL_PASSWORD: padaria
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # Serviço de Pedidos
+  pedidos_service:
+    build: ./orderService
+    container_name: service_pedidos
+    # Ajuste o caminho dos arquivos de migração
+    command: >
+      sh -c "node ./src/migrations/001-create-database.js && 
+             node ./src/migrations/002-create-order-table.js && 
+             npm start"  
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: user_password
+      DB_NAME: padaria_db
+    volumes:
+      - ./orderService:/usr/src/app  # Monta o diretório orderService em /usr/src/app
+    
+    
+    
+volumes:
+  db_data:
