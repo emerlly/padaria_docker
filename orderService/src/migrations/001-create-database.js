@@ -1,18 +1,15 @@
 const mysql = require('mysql2/promise');
 const databaseConfig = require('../config/database');
 
+const connection = require('../config/conection');
 async function CreateDatabase(){
     try {
-        const connection = await mysql.createConnection({
-            host: databaseConfig.host,
-            user: databaseConfig.user,
-            password: databaseConfig.password,
-        });
-        await connection.query(
+        const conn = await connection();
+        await conn.query(
             `CREATE DATABASE IF NOT EXISTS ${databaseConfig.database}`
 
         );
-        await connection.end();
+        await conn.end();
         console.log('database created');
     } catch (error) {
         console.log('Error creating database', error);
