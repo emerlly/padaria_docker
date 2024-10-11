@@ -1,0 +1,61 @@
+1. Serviço de Pedido (PedidoMicroservice)
+Responsável pelo gerenciamento de pedidos.
+    Métodos sugeridos:
+    criarPedido(cliente, List<Produto> produtos)
+    Inclui a lógica de criação e atualização de pedidos.
+
+2. Serviço de Cliente (ClienteMicroservice)
+Gerencia os dados e as operações relacionadas aos clientes.
+Métodos sugeridos:
+    registrarCliente(cliente)
+    consultarCliente(id)
+
+3. Serviço de Vendas (VendaMicroservice)
+Lida com as vendas, incluindo o fechamento da venda e a emissão de recibos.
+    Métodos sugeridos:
+    fecharVenda(cliente, List<Produto> produtos)
+    emitirRecibo(venda)
+
+4. Serviço de Pagamentos (PagamentoMicroservice)
+Focado em processar diferentes tipos de pagamentos.
+Métodos sugeridos:
+    processarPagamento(pedido, dadosPagamento)
+    Inclui a lógica de validação e confirmação do pagamento.
+
+5. Serviço de Produtos (ProdutoMicroservice)
+Gerencia os produtos disponíveis para venda.
+Métodos sugeridos:
+    listarProdutos()
+    adicionarProduto(produto)
+    atualizarProduto(produto)
+
+6. Serviço de Estoque (EstoqueMicroservice)
+Lida com o gerenciamento de inventário e controle de estoque.
+Métodos sugeridos:
+    consultarEstoque(produto)
+    atualizarEstoque(produto, quantidade)
+
+7. Serviço de Ingredientes (IngredienteMicroservice)
+Responsável pelo controle e inventário de ingredientes.
+Métodos sugeridos:
+    listarIngredientes()
+    adicionarIngrediente(ingrediente)
+    atualizarQuantidadeIngrediente(ingrediente, quantidade)
+
+8. Serviço de Receita (ReceitaMicroservice)
+Centraliza as operações relacionadas à criação e gestão de receitas de produtos.
+Métodos sugeridos:
+    criarReceita(nome, ingredientes)
+    consultarReceita(id)
+
+9. Serviço de Fornecedores (FornecedorMicroservice)
+Gerencia as informações sobre os fornecedores e suas interações.
+Métodos sugeridos:
+    listarFornecedores()
+    consultarFornecedor(id)
+
+10. Serviço de Programação de Pedidos (ProgramacaoPedidosMicroservice)
+Focado em programar e gerenciar cronogramas de pedidos.
+Métodos sugeridos:
+    gerarCronogramaPedidos(cliente, pedidos)
+    calcularPrioridadePedidos(varianteDeTempo)

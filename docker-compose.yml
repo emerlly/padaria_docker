@@ -1,17 +1,15 @@
-version: '3.8'
-
 services:
   # Serviço para o banco de dados MySQL
   db:
     image: mysql:8.0
     container_name: Padaria
     environment:
-      MYSQL_ROOT_PASSWORD: root_password  # Senha do usuário root
+      MYSQL_ROOT_PASSWORD: root  # Senha do usuário root
       MYSQL_DATABASE: padaria_db           # Nome do banco de dados inicial
       MYSQL_USER: padaria                  # Nome do usuário a ser criado
       MYSQL_PASSWORD: padaria               # Senha do usuário criado
     ports:
-      - "3308:3306"                         # Mapeamento de portas (host:container)
+      - "3306:3306"                         # Mapeamento de portas (host:container)
     volumes:
       - db_data:/var/lib/mysql              # Persistência de dados do banco
 
@@ -39,17 +37,15 @@ services:
   sell_service:
     build: ./sellService                    # Caminho para o Dockerfile do serviço de vendas
     container_name: service_vendas          # Nome do container para o serviço de vendas
+    command: >
+      sh -c "npm start"                      # Comando para executar as migrações e iniciar o serviço
     ports:
       - "3001:3001"                         # Mapeamento de portas (host:container)
     depends_on:
       - pedidos_service                      # Garante que o serviço de pedidos esteja em execução
-    environment:
-      DB_HOST: db                           # Host do banco de dados
-      DB_USER: padaria                      # Usuário do banco de dados
-      DB_PASSWORD: padaria                  # Senha do banco de dados
-      DB_NAME: padaria_db                   # Nome do banco de dados
+       
     volumes:
       - ./sellService:/usr/src/app         # Monta o diretório sellService em /usr/src/app para desenvolvimento
 
 volumes:
-  db_data:                                  # Volume para persistência dos dados do banco
+  db_data: 

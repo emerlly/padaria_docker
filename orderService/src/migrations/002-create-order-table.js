@@ -12,6 +12,7 @@ async function CreateTableOrder() {
         console.log('Database connected');
         await connection.query(`USE ${databaseConfig.database}`);
         console.log('Using database', databaseConfig.database);
+        
         await connection.query(`
         CREATE TABLE IF NOT EXISTS orders(
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
