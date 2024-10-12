@@ -9,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 app.use(router);
 
-
 app.listen(port, () => {
   console.log(`servidor de pedidos rodando na porta ${port}`);
 });

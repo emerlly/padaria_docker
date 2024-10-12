@@ -26,34 +26,50 @@ router.get('/orders', async (req, res) => {
 
 //cadastrar pedido
 router.post('/orders', async (req, res) => {
-  const { description, date, status, address } = req.body;
+  const { clienteId, status, valorTotal, items } = req.body;
 
-  if (!description || !date || !status || !address) {
-    return res.status(400).send('Todos os campos são obrigatórios.');
+  // Verifica se todos os campos obrigatórios são fornecidos
+  if (!clienteId || !status || !valorTotal || !items || !Array.isArray(items)) {
+    return res.status(400).send('Todos os campos são obrigatórios e "items" deve ser uma lista de itens.');
   }
 
-  const conn = await connection();
-  await conn.query(`USE ${databaseConfig.database}`);
-  const sql = `INSERT INTO orders ( description, date, status, address) VALUES ( ?, ?, ?, ?)`;
-  await conn.query(sql, [description, date, status, address], (err, result) => {
-    if (err) {
-      console.error('Erro ao criar pedido:', err);
-      res.status(500).send('Erro ao criar pedido');
-    } else {
-      res.status(200).send('Pedido criado com sucesso!');
+  try {
+    const conn = await connection();
+    await conn.query(`USE ${databaseConfig.database}`);
+
+    // Insere o pedido na tabela orders
+    const orderSql = `INSERT INTO pedido (clienteId, dataCriacao, status, valorTotal) VALUES (?, CURRENT_TIMESTAMP, ?, ?)`;
+    const [orderResult] = await conn.query(orderSql, [clienteId, status, valorTotal]);
+
+    const orderId = orderResult.insertId;
+
+    // Insere os itens do pedido na tabela orderedItems
+    const itemSql = `INSERT INTO pedidos_item (PedidoId, produtoId, quantidade, precoUnitario, subtotal) VALUES (?, ?, ?, ?, ?)`;
+
+    for (const item of items) {
+      const { produtoId, quantidade, precoUnitario } = item;
+      const subtotal = quantidade * precoUnitario;
+      await conn.query(itemSql, [orderId, produtoId, quantidade, precoUnitario, subtotal]);
     }
-  });
-  await conn.end();
-  res.status(200).send('Pedido criado com sucesso!');
+
+    res.status(201).send({ message: 'Pedido e itens cadastrados com sucesso!', orderId });
+
+    await conn.end();
+  } catch (err) {
+    console.error('Erro ao criar pedido e itens:', err);
+    res.status(500).send('Erro ao criar pedido e itens.');
+  }
 });
 
+
+//busca pedido pelo id
 router.get('/orders/:id', async (req, res) => {
   try {
     const { id } = req.params; // Obtém o ID do pedido a partir dos parâmetros da URL
     const conn = await connection(); // Conexão com o banco de dados
     await conn.query(`USE ${databaseConfig.database}`); // Seleciona o banco de dados
 
-    const sql = 'SELECT * FROM orders WHERE id = ?';
+    const sql = 'SELECT * FROM pedido WHERE id = ?';
     const [rows] = await conn.query(sql, [id]); // Executa a query com o ID fornecido
 
     if (rows.length === 0) {

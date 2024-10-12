@@ -1,51 +1,107 @@
+version: '3.8'
+
 services:
-  # Serviço para o banco de dados MySQL
-  db:
+  # Serviço para o banco de dados MySQL para Pedidos
+  pedidos_db:
     image: mysql:8.0
-    container_name: Padaria
+    container_name: pedidos_db
     environment:
-      MYSQL_ROOT_PASSWORD: root  # Senha do usuário root
-      MYSQL_DATABASE: padaria_db           # Nome do banco de dados inicial
-      MYSQL_USER: padaria                  # Nome do usuário a ser criado
-      MYSQL_PASSWORD: padaria               # Senha do usuário criado
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pedidos_db
+      MYSQL_USER: padaria
+      MYSQL_PASSWORD: padaria
     ports:
-      - "3306:3306"                         # Mapeamento de portas (host:container)
+      - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql              # Persistência de dados do banco
+      - db_data:/var/lib/mysql
+
+  # Serviço para o banco de dados MySQL para Vendas
+  vendas_db:
+    image: mysql:8.0
+    container_name: vendas_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vendas_db
+      MYSQL_USER: padaria
+      MYSQL_PASSWORD: padaria
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data_vendas:/var/lib/mysql
+
+  # Serviço para o banco de dados de cliente
+  cliente_db:
+    image: mysql:8.0
+    container_name: cliente_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cliente_db
+      MYSQL_USER: padaria
+      MYSQL_PASSWORD: padaria
+    ports:
+      - "3308:3306"
+    volumes:
+      - db_data_cliente:/var/lib/mysql
 
   # Serviço de Pedidos
   pedidos_service:
-    build: ./orderService                   # Caminho para o Dockerfile do serviço de pedidos
-    container_name: service_pedidos         # Nome do container para o serviço de pedidos
+    build: ./orderService
+    container_name: service_pedidos
     command: >
       sh -c "node ./src/migrations/001-create-database.js && 
-             node ./src/migrations/002-create-order-table.js && 
-             npm start"                      # Comando para executar as migrações e iniciar o serviço
+             node ./src/migrations/002-create-pedido-table.js && 
+             npm start"
     ports:
-      - "3000:3000"                         # Mapeamento de portas (host:container)
+      - "3000:3000"
     depends_on:
-      - db                                   # Garante que o serviço de banco de dados esteja em execução antes do serviço de pedidos
+      - pedidos_db
     environment:
-      DB_HOST: db                           # Host do banco de dados
-      DB_USER: padaria                      # Usuário do banco de dados
-      DB_PASSWORD: padaria                  # Senha do banco de dados
-      DB_NAME: padaria_db                   # Nome do banco de dados
+      DB_HOST: pedidos_db
+      DB_USER: padaria
+      DB_PASSWORD: padaria
+      DB_NAME: pedidos_db
     volumes:
-      - ./orderService:/usr/src/app        # Monta o diretório orderService em /usr/src/app para desenvolvimento
+      - ./orderService:/usr/src/app
 
   # Serviço de Vendas
   sell_service:
-    build: ./sellService                    # Caminho para o Dockerfile do serviço de vendas
-    container_name: service_vendas          # Nome do container para o serviço de vendas
+    build: ./sellService
+    container_name: service_vendas
     command: >
-      sh -c "npm start"                      # Comando para executar as migrações e iniciar o serviço
+      sh -c "npm start"
     ports:
-      - "3001:3001"                         # Mapeamento de portas (host:container)
+      - "3001:3001"
     depends_on:
-      - pedidos_service                      # Garante que o serviço de pedidos esteja em execução
-       
+      - vendas_db
+    environment:
+      DB_HOST: vendas_db
+      DB_USER: padaria
+      DB_PASSWORD: padaria
+      DB_NAME: vendas_db
     volumes:
-      - ./sellService:/usr/src/app         # Monta o diretório sellService em /usr/src/app para desenvolvimento
+      - ./sellService:/usr/src/app
+
+  # Serviço de Cliente
+  client_service:
+    build: ./clientService
+    container_name: service_client
+    command: >
+      sh -c "node ./src/migrations/001-create-database.js && 
+             node ./src/migrations/002-create-client-table.js &&
+             npm start"
+    ports:
+      - "3002:3002"
+    depends_on:
+      - cliente_db
+    environment:
+      DB_HOST: cliente_db
+      DB_USER: padaria
+      DB_PASSWORD: padaria
+      DB_NAME: cliente_db
+    volumes:
+      - ./clientService:/usr/src/app
 
 volumes:
-  db_data: 
+  db_data:
+  db_data_vendas:
+  db_data_cliente:

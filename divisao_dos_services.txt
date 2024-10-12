@@ -1,3 +1,4 @@
+########## OK ##########
 1. Serviço de Pedido (PedidoMicroservice)
 Responsável pelo gerenciamento de pedidos.
     Métodos sugeridos:
@@ -10,6 +11,7 @@ Métodos sugeridos:
     registrarCliente(cliente)
     consultarCliente(id)
 
+########## OK ##########
 3. Serviço de Vendas (VendaMicroservice)
 Lida com as vendas, incluindo o fechamento da venda e a emissão de recibos.
     Métodos sugeridos:
