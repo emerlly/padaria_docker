@@ -1,6 +1,6 @@
 // src/migrations/001-create-clientes-table.js
 
-const connection = require('../database/connection'); // ajuste o caminho conforme sua estrutura
+const connection = require('../config/connection'); // ajuste o caminho conforme sua estrutura
 const databaseConfig = require('../config/database'); // ajuste o caminho conforme sua estrutura
 
 async function createClientesTable() {

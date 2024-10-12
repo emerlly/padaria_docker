@@ -14,14 +14,14 @@ async function CreateTablePedidoItem() {
         console.log('Using database', databaseConfig.database);
 
         await connection.query(`
-        CREATE TABLE IF NOT EXISTS pedidos_item (
+        CREATE TABLE IF NOT EXISTS pedido_item (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             pedidoId INT NOT NULL,
             produtoId INT NOT NULL,
             quantidade INT NOT NULL,
             precoUnitario DECIMAL(10, 2) NOT NULL,
             subtotal DECIMAL(10, 2),
-            FOREIGN KEY (pedidoID) REFERENCES orders(id)
+            FOREIGN KEY (pedidoID) REFERENCES pedido(id)
     );
         `);
         await connection.end();

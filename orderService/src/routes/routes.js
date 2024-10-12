@@ -4,7 +4,7 @@ const connection = require('../config/conection');
 const databaseConfig = require('../config/database');
 
 router.get('/', (req, res) => {
-  res.send('rota principal');
+  res.send('rota principal de pedidos');
 });
 
 //busca todos os pedidos no server
@@ -13,7 +13,7 @@ router.get('/orders', async (req, res) => {
     const conn = await connection(); // Conexão com o banco de dados
     await conn.query(`USE ${databaseConfig.database}`); // Seleciona o banco de dados
 
-    const sql = 'SELECT * FROM orders';
+    const sql = 'SELECT * FROM pedido';
     const [rows] = await conn.query(sql); // Executa a query e espera pelos resultados
 
     res.status(200).json(rows); // Retorna os resultados em formato JSON
@@ -44,7 +44,7 @@ router.post('/orders', async (req, res) => {
     const orderId = orderResult.insertId;
 
     // Insere os itens do pedido na tabela orderedItems
-    const itemSql = `INSERT INTO pedidos_item (PedidoId, produtoId, quantidade, precoUnitario, subtotal) VALUES (?, ?, ?, ?, ?)`;
+    const itemSql = `INSERT INTO pedido_item (PedidoId, produtoId, quantidade, precoUnitario, subtotal) VALUES (?, ?, ?, ?, ?)`;
 
     for (const item of items) {
       const { produtoId, quantidade, precoUnitario } = item;

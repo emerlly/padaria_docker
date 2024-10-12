@@ -6,6 +6,7 @@ async function connection() {
         host: databaseConfig.host,
         user: databaseConfig.user,
         password: databaseConfig.password,
+        port: 3306
     });
     return connection
 }

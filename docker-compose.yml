@@ -11,7 +11,7 @@ services:
       MYSQL_USER: padaria
       MYSQL_PASSWORD: padaria
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
 
@@ -25,7 +25,7 @@ services:
       MYSQL_USER: padaria
       MYSQL_PASSWORD: padaria
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - db_data_vendas:/var/lib/mysql
 
@@ -50,6 +50,7 @@ services:
     command: >
       sh -c "node ./src/migrations/001-create-database.js && 
              node ./src/migrations/002-create-pedido-table.js && 
+             node ./src/migrations/003-create-pedido-item-table.js &&
              npm start"
     ports:
       - "3000:3000"
@@ -87,10 +88,10 @@ services:
     container_name: service_client
     command: >
       sh -c "node ./src/migrations/001-create-database.js && 
-             node ./src/migrations/002-create-client-table.js &&
+             node ./src/migrations/002-create-table-user.js &&
              npm start"
     ports:
-      - "3002:3002"
+      - "50051:50051"
     depends_on:
       - cliente_db
     environment:
@@ -105,3 +106,7 @@ volumes:
   db_data:
   db_data_vendas:
   db_data_cliente:
+
+networks:
+  client_service-network:
+    driver: bridge

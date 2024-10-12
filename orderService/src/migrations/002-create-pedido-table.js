@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 const databaseConfig = require('../config/database');
 
-async function CreateTableOrder() {
+async function CreateTablePedido() {
     try {
         const connection = await mysql.createConnection({
             host: databaseConfig.host,
@@ -30,4 +30,4 @@ async function CreateTableOrder() {
 
     }
 }
-CreateTableOrder();
+CreateTablePedido();
