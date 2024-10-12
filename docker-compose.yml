@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # Serviço para o banco de dados MySQL para Pedidos
@@ -45,7 +44,8 @@ services:
 
   # Serviço de Pedidos
   pedidos_service:
-    build: ./orderService
+    build: 
+      context: ./orderService
     container_name: service_pedidos
     command: >
       sh -c "node ./src/migrations/001-create-database.js && 
@@ -66,7 +66,8 @@ services:
 
   # Serviço de Vendas
   sell_service:
-    build: ./sellService
+    build: 
+      context: ./sellService
     container_name: service_vendas
     command: >
       sh -c "npm start"
@@ -82,16 +83,18 @@ services:
     volumes:
       - ./sellService:/usr/src/app
 
-  # Serviço de Cliente
+  # Serviço de Cliente RPC
   client_service:
-    build: ./clientService
+    build: 
+      context: ./clientService
     container_name: service_client
     command: >
       sh -c "node ./src/migrations/001-create-database.js && 
              node ./src/migrations/002-create-table-user.js &&
+             node ./src/migrations/003-create-table-sell.js &&
              npm start"
     ports:
-      - "50051:50051"
+      - "8081:8081"
     depends_on:
       - cliente_db
     environment:
@@ -102,11 +105,20 @@ services:
     volumes:
       - ./clientService:/usr/src/app
 
+  # Servico de Pagamento RPC
+
+
 volumes:
   db_data:
   db_data_vendas:
   db_data_cliente:
 
+
 networks:
   client_service-network:
+    driver: bridge
+
+  sell_service-network:
+    driver: bridge
+  pedidos_service-network:
     driver: bridge
