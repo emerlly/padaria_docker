@@ -6,4 +6,8 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
   },
   verbose: true,
+  env:{
+    PROTO_PATH: './clientService/src/cliente.proto',
+  }
 };
+

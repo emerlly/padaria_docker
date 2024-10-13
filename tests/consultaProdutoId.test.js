@@ -20,4 +20,23 @@ describe('Teste de busca de produto por ID', () => {
         expect(response.data).toBe('Pedido não encontrado');
     });
     
+    it('Deve retornar um produdo pela rota de vendas', async () => {
+        const response = await axios.get('http://localhost:3001/sales/2').catch(e => e.response);
+        
+        expect(response.status).toBe(200);
+        expect(response.data).toHaveProperty('id', 2);
+        expect(response.data).toHaveProperty('clienteId', 1);
+        expect(response.data).toHaveProperty('status', 'pendente');
+        expect(response.data).toHaveProperty('valorTotal', '120.00');
+
+    });
+    
+    it('Deve retornar 404 para um produdo inexistente pela rota de vendas', async () => {
+        const response = await axios.get('http://localhost:3001/sales/9999').catch(e => e.response);
+        
+        expect(response.status).toBe(404);
+        expect(response.data).toHaveProperty('message','Nenhuma venda encontrada');
+    });
+    
+
 });

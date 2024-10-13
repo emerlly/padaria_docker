@@ -1,10 +1,8 @@
-const grpc = require('grpc');
-const pagamentosProto = require('./pagamentos.proto');
+const path = require('path');
 
-const pagamentosServer = new grpc.Server();
-pagamentosServer.addService(pagamentosProto.PagamentosService, {
-  // Implementação do serviço de pagamentos
-});
+const serverPath = path.join(__dirname, 'RPC', 'server', 'rpcServer.js');
+const clientPath = path.join(__dirname, 'RPC', 'client', 'rpcClient.js');
 
-pagamentosServer.bind('0.0.0.0:8082', grpc.ServerCredentials.createInsecure());
-pagamentosServer.start();
+require(serverPath);
+require(clientPath);
+console.log('Servidor iniciado');

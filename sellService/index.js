@@ -7,17 +7,23 @@ const PORT = 3001; // Porta de serviço
 
 app.get(`/sales/:id`, async (req, res) => {
   const id = req.params.id;
+
   try {
     const response = await axios.get(`http://pedidos_service:3000/orders/${id}`);
-    if (!response.data || response.data.length === 0) {
-      return res.status(404).json({ message: 'Nenhuma venda encontrada' });
-    }
+
     return res.status(200).json(response.data);
   } catch (error) {
-    console.error('Erro ao buscar vendas:');
-    return res.status(500).json({ message: 'Erro ao buscar vendas' });
+    if (error.response && error.response.status === 404) {
+      // Se o serviço de pedidos retornar 404, também retornamos 404 aqui
+      return res.status(404).json({ message: 'Nenhuma venda encontrada' });
+    }
+
+    console.error('Erro ao buscar a venda:', error.message);
+    return res.status(500).json({ message: 'Erro ao processar a solicitação' });
   }
 });
+
+
 
 app.get('/sales', async (req, res) => {
 

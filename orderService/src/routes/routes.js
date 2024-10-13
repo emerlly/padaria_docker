@@ -16,13 +16,21 @@ router.get('/orders', async (req, res) => {
     const sql = 'SELECT * FROM pedido';
     const [rows] = await conn.query(sql); // Executa a query e espera pelos resultados
 
-    res.status(200).json(rows); // Retorna os resultados em formato JSON
+    if (rows.length === 0) {
+      // Se não houver pedidos, retorna 404
+      res.status(404).json({ message: 'Nenhum pedido encontrado' });
+    } else {
+      // Se houver pedidos, retorna os resultados em formato JSON
+      res.status(200).json(rows);
+    }
+
     await conn.end(); // Encerra a conexão com o banco de dados
   } catch (error) {
     console.error('Erro ao buscar pedidos:', error);
     res.status(500).send('Erro ao buscar pedidos');
   }
 });
+
 
 //cadastrar pedido
 router.post('/orders', async (req, res) => {

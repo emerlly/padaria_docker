@@ -1,31 +1,37 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
+// Carrega o arquivo proto para definir o serviço
 const packageDefinition = protoLoader.loadSync('./src/cliente.proto', {});
 const padariaProto = grpc.loadPackageDefinition(packageDefinition).padaria;
 
-const client = new padariaProto.Padaria('localhost:50051', grpc.credentials.createInsecure());
+// Cria um cliente para se conectar ao servidor gRPC
+const client = new padariaProto.Padaria('localhost:50052', grpc.credentials.createInsecure());
 
-client.cadastrarCliente({ nome: 'Cliente 1', email: 'cliente@example.com' }, (error, response) => {
+// Função para cadastrar um cliente
+function cadastrarCliente(nome, email, telefone, endereco) {
+  client.cadastrarCliente({ nome, email, telefone, endereco }, (error, response) => {
     if (error) {
-        console.error(error);
+      console.error('Erro ao cadastrar cliente:', error);
     } else {
-        console.log(response.message);
+      console.log('Cliente cadastrado:', response);
     }
-});
+  });
+}
 
-client.cadastrarVenda({ idCliente: '1', produtos: ['Produto 1', 'Produto 2'] }, (error, response) => {
+// Função para listar um cliente por ID
+function listarCliente(id) {
+  client.listarCliente({ id }, (error, response) => {
     if (error) {
-        console.error(error);
+      console.error('Erro ao listar cliente:', error.message);
     } else {
-        console.log(response.message);
+      console.log('Dados do cliente:', response);
     }
-});
+  });
+}
 
-client.listarCliente({ id: '1' }, (error, response) => {
-    if (error) {
-        console.error(error);
-    } else {
-        console.log(response);
-    }
-});
+// Exportar as funções para que possam ser chamadas de outros módulos ou diretamente via Insomnia
+module.exports = {
+  cadastrarCliente,
+  listarCliente
+};

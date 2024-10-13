@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package padaria;
+
+// Serviço de Pagamento
+service Pagamento {
+    rpc processarPagamento(PagamentoRequest) returns (PagamentoResponse);
+}
+
+// Mensagem de solicitação de pagamento
+message PagamentoRequest {
+    Pedido pedido = 1; // Dados do pedido
+    DadosPagamento dadosPagamento = 2; // Dados do pagamento
+}
+
+// Mensagem que representa o pedido
+message Pedido {
+    int32 id = 1; // ID do pedido
+}
+
+// Mensagem de dados do pagamento
+message DadosPagamento {
+    string metodo = 1; // Método de pagamento
+    double valor = 2; // Valor do pagamento
+    string moeda = 3; // Moeda do pagamento
+}
+
+// Mensagem de resposta de pagamento
+message PagamentoResponse {
+    string message = 1; // Mensagem de sucesso ou erro
+    int32 idPagamento = 2; // ID do pagamento
+    bool sucesso = 3; // Indicador de sucesso do pagamento
+}

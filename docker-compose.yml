@@ -42,6 +42,20 @@ services:
     volumes:
       - db_data_cliente:/var/lib/mysql
 
+  # Serviço para banco de dados de vendas
+  pagamento_db:
+    image: mysql:8.0
+    container_name: pagamento_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pagamento_db
+      MYSQL_USER: padaria
+      MYSQL_PASSWORD: padaria
+    ports:
+      - "3309:3306"
+    volumes:
+      - db_data_cliente:/var/lib/mysql
+
   # Serviço de Pedidos
   pedidos_service:
     build: 
@@ -94,9 +108,11 @@ services:
              node ./src/migrations/003-create-table-sell.js &&
              npm start"
     ports:
-      - "8081:8081"
+      - "50051:50051"
     depends_on:
       - cliente_db
+      - sell_service
+      - vendas_db
     environment:
       DB_HOST: cliente_db
       DB_USER: padaria

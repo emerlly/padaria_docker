@@ -11,15 +11,22 @@ service Padaria {
 message ClienteRequest {
     string nome = 1;
     string email = 2;
+    string endereco = 3;
+    string telefone = 4;
 }
 
 message ClienteIdRequest { // New message type for client ID
     string id = 1; // Added an ID field
+    string nome =2;
 }
 
 message ClienteResponse {
     string message = 1;
     string id = 2;
+    string nome = 3;
+    string email = 4;
+    string endereco = 5;
+    string telefone = 6;
 }
 
 message VendaRequest {

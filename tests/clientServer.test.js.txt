@@ -1,17 +1,32 @@
 const clientService = require('../clientService');
+const { v4: uuidv4 } = require('uuid');
 
 describe('clientService', () => {
   it('deve retornar uma lista de clientes', async () => {
     const clientes = await clientService.getClientes();
     expect(clientes).toBeInstanceOf(Array);
-    expect(clientes.length).toBeGreaterThan(0); // Verifica se a lista não está vazia
+    expect(clientes.length).toBeGreaterThan(0);
+    expect(clientes[0]).toHaveProperty('id');
+    expect(clientes[0]).toHaveProperty('nome');
+    expect(clientes[0]).toHaveProperty('email');
   });
 
   it('deve retornar um cliente por ID', async () => {
-    const id = '1'; // ID de exemplo
+    const id = uuidv4();
     const cliente = await clientService.getClienteById(id);
-    expect(cliente).toHaveProperty('id', id); // Verifica se o ID corresponde
-    expect(cliente).toHaveProperty('nome'); // Verifica se o nome está presente
-    expect(cliente).toHaveProperty('email'); // Verifica se o email está presente
+    expect(cliente).toHaveProperty('id', id);
+    expect(cliente).toHaveProperty('nome');
+    expect(cliente).toHaveProperty('email');
+  });
+
+  it('deve retornar um erro quando o ID não é encontrado', async () => {
+    const id = uuidv4();
+    try {
+      await clientService.getClienteById(id);
+      fail('Deveria ter retornado um erro');
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Cliente não encontrado');
+    }
   });
 });
