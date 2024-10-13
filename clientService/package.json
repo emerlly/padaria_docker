@@ -2,13 +2,13 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.12.2",
     "@grpc/proto-loader": "^0.7.13",
-    "express": "^4.21.1",
+    "express": "5.0.1",
     "jayson": "^4.1.2",
     "mysql2": "^3.11.3",
     "nodemon": "^3.1.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon index.js"
   }
 }

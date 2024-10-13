@@ -1,10 +1,11 @@
 syntax = "proto3";
 
-package cliente;
+package padaria;
 
-service Cliente {
-    rpc registrarCliente(ClienteRequest) returns (ClienteResponse);
-    rpc consultarCliente(ClienteIdRequest) returns (ClienteResponse);
+service Padaria {
+    rpc cadastrarCliente(ClienteRequest) returns (ClienteResponse);
+    rpc cadastrarVenda(VendaRequest) returns (VendaResponse);
+    rpc listarCliente(ClienteIdRequest) returns (ClienteResponse); // Changed to use ClienteIdRequest
 }
 
 message ClienteRequest {
@@ -12,13 +13,21 @@ message ClienteRequest {
     string email = 2;
 }
 
-message ClienteIdRequest {
-    string id = 1;
+message ClienteIdRequest { // New message type for client ID
+    string id = 1; // Added an ID field
 }
 
 message ClienteResponse {
     string message = 1;
     string id = 2;
-    string nome = 3;
-    string email = 4;
+}
+
+message VendaRequest {
+    string idCliente = 1;
+    repeated string produtos = 2;
+}
+
+message VendaResponse {
+    string message = 1;
+    string idVenda = 2;
 }

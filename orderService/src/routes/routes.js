@@ -73,7 +73,7 @@ router.get('/orders/:id', async (req, res) => {
     const [rows] = await conn.query(sql, [id]); // Executa a query com o ID fornecido
 
     if (rows.length === 0) {
-      res.status(404).send('Pedido não encontrado'); // Retorna erro se o pedido não for encontrado
+      res.status(404).send(message = 'Pedido não encontrado'); // Retorna erro se o pedido não for encontrado
     } else {
       res.status(200).json(rows[0]); // Retorna o pedido encontrado em formato JSON
     }
@@ -81,7 +81,7 @@ router.get('/orders/:id', async (req, res) => {
     await conn.end(); // Encerra a conexão com o banco de dados
   } catch (error) {
     console.error('Erro ao buscar pedido:', error);
-    res.status(500).send('Erro ao buscar pedido');
+    res.status(500).send(message ='Erro ao buscar pedido');
   }
 });
 

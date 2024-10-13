@@ -1,0 +1,17 @@
+const clientService = require('../clientService');
+
+describe('clientService', () => {
+  it('deve retornar uma lista de clientes', async () => {
+    const clientes = await clientService.getClientes();
+    expect(clientes).toBeInstanceOf(Array);
+    expect(clientes.length).toBeGreaterThan(0); // Verifica se a lista não está vazia
+  });
+
+  it('deve retornar um cliente por ID', async () => {
+    const id = '1'; // ID de exemplo
+    const cliente = await clientService.getClienteById(id);
+    expect(cliente).toHaveProperty('id', id); // Verifica se o ID corresponde
+    expect(cliente).toHaveProperty('nome'); // Verifica se o nome está presente
+    expect(cliente).toHaveProperty('email'); // Verifica se o email está presente
+  });
+});

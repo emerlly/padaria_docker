@@ -1,13 +1,8 @@
-const express = require('express');
-const app = express();
-const port = 8081;
+const path = require('path');
 
-const routesService = require('./src/services/routesService');
-const clientService = require('./src/services/clientService');
+const serverPath = path.join(__dirname, 'RPC', 'server', 'rpcServer.js');
+const clientPath = path.join(__dirname, 'RPC', 'client', 'rpcClient.js');
 
-app.use('/sell', routesService);
-app.use('/client', clientService);
-
-app.listen(port, () => {
-  console.log(`Servidor de clientes RPCrodando na porta ${port}`);
-});
+require(serverPath);
+require(clientPath);
+console.log('Servidor iniciado');
