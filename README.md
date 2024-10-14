@@ -1,17 +1,18 @@
 # Sistema de Mensageria de Padaria com Docker
-    Este projeto implementa um sistema de mensageria para uma padaria utilizando microserviços e Docker. O sistema está estruturado para lidar com pedidos, vendas e cadastro de clientes.
+    Este projeto implementa um sistema de mensageria para uma padaria utilizando microserviços e Docker. 
+    O sistema está estruturado para lidar com pedidos, vendas e cadastro de clientes.
 
 # 🚀 Iniciando o Sistema
 Pré-requisitos
-    - Docker e Docker Compose instalados em sua máquina.
+     Docker e Docker Compose instalados em sua máquina.
 
 Passo a passo para subir o ambiente
-    - Navegue até o diretório raiz do projeto (PADARIA_DOCKER).
-    - Construa as imagens Docker e inicie os containers:
-    $ docker-compose up --build
-
-   - Após a criação das imagens, inicie novamente os serviços:
-    $ docker-compose up
+ Navegue até o diretório raiz do projeto (PADARIA_DOCKER).
+ 
+     Construa as imagens Docker e inicie os containers:
+     $ docker-compose up --build
+     Após a criação das imagens, inicie novamente os serviços:
+     $ docker-compose up
 
 📦 Microserviços
 O sistema é composto por três microserviços principais:
@@ -24,7 +25,8 @@ O sistema é composto por três microserviços principais:
 O OrderService é responsável por gerenciar os pedidos da padaria.
 
 Endpoints Disponíveis
-    - Criar um novo pedido
+
+     Criar um novo pedido
 
         -> Método: POST
         -> URL: http://localhost:3000/orders
@@ -60,6 +62,7 @@ Endpoints Disponíveis
 O SellService é responsável por consultar informações de vendas e interagir com os pedidos.
 
 Endpoints Disponíveis
+
     -> Buscar pedido por ID (integrado ao OrderService)
         -> Método: POST
         -> URL: http://localhost:3001/sales/:id
@@ -69,6 +72,7 @@ Endpoints Disponíveis
 O ClientService utiliza comunicação RPC (Remote Procedure Call) para gerenciar informações de clientes.
 
 Métodos Disponíveis
+
     -> Cadastrar Cliente
         -> Método: gRPC
         -> URL: localhost:50051/
