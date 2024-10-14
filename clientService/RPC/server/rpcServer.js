@@ -12,7 +12,6 @@ const server = new grpc.Server();
 // Função para cadastrar um cliente no banco de dados
 async function cadastrarCliente(call, callback) {
     const { nome, email, endereco, telefone } = call.request;
-    console.log('dados recebidos', call.request);
 
     try {
         const conn = await connection(); // Conexão com o banco de dados
